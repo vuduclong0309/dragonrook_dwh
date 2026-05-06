@@ -1,0 +1,16 @@
+name: 'gme_mart'
+version: '3.1.0'
+config-version: 2
+profile: 'gme_mart'
+
+model-paths: ["src/dml"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  warrant_strike: 32.0
+  warrant_quantity: 110
+  warrant_expiry: '2026-10-30'
+  share_quantity: 121

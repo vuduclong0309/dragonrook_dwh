@@ -1,0 +1,42 @@
+name: GME Mart Daily Pipeline
+
+on:
+  schedule:
+    - cron: '45 20 * * 1-5'  # 16:45 ET (20:45 UTC), weekdays only
+  workflow_dispatch: {}       # manual trigger
+
+jobs:
+  gme-mart:
+    runs-on: ubuntu-latest
+    env:
+      MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install dbt-core dbt-duckdb
+
+      - name: Run DDL (create/verify schemas)
+        working-directory: dapes/gme_mart
+        run: python src/resource/run_ddl.py --target cloud
+
+      - name: dbt deps
+        working-directory: dapes/gme_mart
+        run: dbt deps --profiles-dir .
+
+      - name: dbt seed (holidays + macro events)
+        working-directory: dapes/gme_mart
+        run: dbt seed --profiles-dir . --target cloud
+
+      - name: dbt run (ODS → DWD → DWS pipeline)
+        working-directory: dapes/gme_mart
+        run: dbt run --profiles-dir . --target cloud
+
+      - name: dbt test (DQC checks)
+        working-directory: dapes/gme_mart
+        run: dbt test --profiles-dir . --target cloud

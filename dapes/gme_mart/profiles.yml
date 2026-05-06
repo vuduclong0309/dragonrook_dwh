@@ -1,0 +1,14 @@
+gme_mart:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "gme_mart_dev.duckdb"
+      threads: 4
+    cloud:
+      type: duckdb
+      path: "md:gme_db?motherduck_token={{ env_var('MOTHERDUCK_TOKEN') }}"
+      threads: 4
+      extensions:
+        - httpfs
+        - json
