@@ -70,8 +70,8 @@ SELECT
         ELSE NULL
     END                                                        AS expiry,
     CASE
-        WHEN LENGTH(p.option_symbol) = 18 THEN
-            CASE WHEN SUBSTRING(p.option_symbol, 10, 1) = 'C' THEN 'call' ELSE 'put' END
+        WHEN LENGTH(p.option_symbol) = 18 AND SUBSTRING(p.option_symbol, 10, 1) = 'C' THEN 'call'
+            WHEN LENGTH(p.option_symbol) = 18 AND SUBSTRING(p.option_symbol, 10, 1) = 'P' THEN 'put'
         ELSE NULL
     END                                                        AS option_type,
     CASE
@@ -83,5 +83,5 @@ SELECT
 FROM parsed p
 
 {% if is_incremental() %}
-WHERE p.pull_date > (SELECT MAX(pull_date) FROM {{ this }})
+WHERE p.pull_date >= (SELECT MAX(pull_date) FROM {{ this }})
 {% endif %}

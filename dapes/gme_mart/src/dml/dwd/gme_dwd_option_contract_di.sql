@@ -57,4 +57,5 @@ FROM {{ ref('gme_ods_cboe_options_chain') }} ods
 WHERE ods.expiry IS NOT NULL          -- filter out unparseable OCC symbols
   AND ods.open_interest > 0
   AND ods.strike IS NOT NULL
+  AND ods.underlying_close IS NOT NULL  -- Codex fix: prevent NULL GEX propagation
   AND (ods.expiry - ods.pull_date) >= 7  -- exclude weeklies

@@ -44,7 +44,7 @@ SELECT
     END                       AS gex_regime,
 
     -- Max pain convergence trend
-    ABS(d.spot - d.max_pain_strike) / d.spot * 100 AS max_pain_distance_pct,
+    ABS(d.spot - d.max_pain_strike) / NULLIF(d.spot, 0) * 100 AS max_pain_distance_pct,
 
     -- Row count for context (how many days of history)
     COUNT(d2.pull_date)       AS trailing_days

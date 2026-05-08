@@ -77,7 +77,7 @@ spot AS (
 SELECT
     s.pull_date, s.ticker, s.spot,
     mp.max_pain_strike,
-    ROUND(ABS(s.spot - mp.max_pain_strike) / s.spot * 100, 2) AS max_pain_convergence_pct,
+    ROUND(ABS(s.spot - mp.max_pain_strike) / NULLIF(s.spot, 0) * 100, 2) AS max_pain_convergence_pct,
     ga.net_gex,
     ga.top_gex_strike,
     pc.pc_ratio,

@@ -19,9 +19,9 @@ SELECT
     GREATEST(0, s.spot - {{ var('warrant_strike') }})
         * {{ var('warrant_quantity') }}                                     AS intrinsic_total,
     ROUND((s.spot - {{ var('warrant_strike') }})
-        / {{ var('warrant_strike') }} * 100, 2)                            AS moneyness_pct,
+        / NULLIF({{ var('warrant_strike') }}, 0) * 100, 2)                 AS moneyness_pct,
     ROUND(({{ var('warrant_strike') }} - s.spot)
-        / s.spot * 100, 2)                                                 AS distance_to_strike_pct,
+        / NULLIF(s.spot, 0) * 100, 2)                                      AS distance_to_strike_pct,
 
     CASE
         WHEN s.spot >= {{ var('warrant_strike') }} THEN 'ITM'
