@@ -13,9 +13,13 @@ WITH gex_agg AS (
 ),
 
 max_pain AS (
+    -- Max pain computed PER EXPIRY (not across all expiries!)
+    -- Then pick nearest-expiry for the daily snapshot.
+    -- Bug fix 2026-05-07: cross-expiry mixing inflated max pain from $24 to $31.50
     WITH pain_calc AS (
         SELECT
-            c1.pull_date, c1.ticker, c1.strike AS candidate,
+            c1.pull_date, c1.ticker, c1.expiry,
+            c1.strike AS candidate,
             SUM(CASE
                 WHEN c2.option_type = 'call' AND c2.strike < c1.strike
                 THEN (c1.strike - c2.strike) * c2.open_interest * 100
@@ -25,12 +29,26 @@ max_pain AS (
             END) AS total_pain
         FROM {{ ref('gme_dwd_option_contract_di') }} c1
         CROSS JOIN {{ ref('gme_dwd_option_contract_di') }} c2
-        WHERE c1.pull_date = c2.pull_date AND c1.ticker = c2.ticker
-        GROUP BY c1.pull_date, c1.ticker, c1.strike
+        WHERE c1.pull_date = c2.pull_date
+          AND c1.ticker = c2.ticker
+          AND c1.expiry = c2.expiry    -- CRITICAL: same expiry only
+        GROUP BY c1.pull_date, c1.ticker, c1.expiry, c1.strike
+    ),
+    max_pain_per_expiry AS (
+        SELECT pull_date, ticker, expiry, candidate AS max_pain_strike
+        FROM pain_calc
+        QUALIFY ROW_NUMBER() OVER (
+            PARTITION BY pull_date, ticker, expiry
+            ORDER BY total_pain ASC
+        ) = 1
     )
-    SELECT pull_date, ticker, candidate AS max_pain_strike
-    FROM pain_calc
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY pull_date, ticker ORDER BY total_pain ASC) = 1
+    -- Pick nearest expiry's max pain for the daily snapshot
+    SELECT pull_date, ticker, max_pain_strike
+    FROM max_pain_per_expiry
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY pull_date, ticker
+        ORDER BY expiry ASC
+    ) = 1
 ),
 
 pc_ratio AS (
