@@ -1,0 +1,33 @@
+version: 2
+
+seeds:
+  - name: holidays_nyse_2025_2027
+    description: "NYSE market holidays 2025-2027. 36 rows. Used by gme_dim_date for is_trading_day flag."
+    columns:
+      - name: holiday_date
+        description: "Date of the NYSE holiday"
+        tests: [not_null, unique]
+      - name: exchange
+        description: "Exchange code (always NYSE)"
+      - name: holiday_name
+        description: "Human-readable name (e.g. Thanksgiving)"
+      - name: early_close
+        description: "True if NYSE closes at 1pm ET instead of full closure"
+
+  - name: macro_events_2025_2027
+    description: "Macro economic events 2025-2027. 63 rows. FOMC, NFP, CPI, GME earnings. Used by gme_dim_date for event flags."
+    columns:
+      - name: event_date
+        description: "Date of the event"
+        tests: [not_null]
+      - name: event_type
+        description: "FOMC / NFP / CPI / GME_ER / GEOPOLITICAL / BROKER"
+        tests:
+          - accepted_values:
+              values: ['FOMC', 'NFP', 'CPI', 'GME_ER', 'GEOPOLITICAL', 'BROKER']
+      - name: event_name
+        description: "Human-readable event name"
+      - name: impact
+        description: "HIGH or CRITICAL"
+      - name: source
+        description: "Data source (fed_calendar, bls_calendar, gamestop_ir, operator_log)"
