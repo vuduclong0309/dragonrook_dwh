@@ -128,6 +128,22 @@ models:
           - accepted_values:
               values: ['UNUSUAL_FLOW', 'POSITION_BUILD', 'TRADING_CHURN', 'NORMAL']
 
+  - name: gme_dws_iv_percentile_1d
+    description: "IV percentile rank vs trailing 252-day history. Phase 1.5 enhancement."
+    columns:
+      - name: iv_regime
+        tests:
+          - accepted_values:
+              values: ['IV_LOW', 'IV_NORMAL', 'IV_HIGH', 'INSUFFICIENT_DATA']
+
+  - name: gme_dws_unusual_flow_summary_1d
+    description: "Pre-aggregated flow signals. Shopee aggregate fact pattern (<1% rows, 100x faster)."
+    columns:
+      - name: flow_signal
+        tests:
+          - accepted_values:
+              values: ['HIGH_ACTIVITY', 'MODERATE_ACTIVITY', 'NORMAL']
+
   - name: gme_dws_warrant_lifecycle_td
     description: "Accumulating snapshot tracking warrant from first observation to expiry. Shopee Star-Schema pattern."
 
