@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: gme_ods_cboe_options_chain
+    description: "Raw CBOE delayed options chain ingested via MotherDuck httpfs. Append-only incremental."
+    columns:
+      - name: pull_date
+        description: "Snapshot date (trading day)"
+      - name: option_symbol
+        description: "OCC option symbol (e.g. GME260605C00020000). 18-char standard, 19-char = GME1 adjusted (filtered in DWD)."
+      - name: expiry
+        description: "Parsed expiry date from OCC symbol. NULL for non-standard (LENGTH != 18)."
+      - name: strike
+        description: "Parsed strike price from OCC symbol (last 8 digits / 1000)."
+      - name: option_type
+        description: "Parsed as 'call' or 'put' from OCC symbol position 10."
+      - name: gamma
+        description: "Option gamma — REAL from CBOE (not BS-calculated). [REAL_API]"
+      - name: delta
+        description: "Option delta from CBOE. [REAL_API]"
+      - name: iv
+        description: "Implied volatility from CBOE. [REAL_API]"
+      - name: underlying_close
+        description: "GME close price at time of CBOE snapshot."
+
+  - name: gme_dwd_option_contract_di
+    description: "Cleaned daily option contract facts. Grain: one row per (pull_date, ticker, expiry, strike, option_type). Filters: OI > 0, non-weekly (DTE >= 7), valid OCC parse."
+    columns:
+      - name: gex_contribution
+        description: "Dollar GEX per 1% spot move = gamma * OI * 100 * spot^2 * 0.01 * sign. Calls=+1, Puts=-1 (dealer convention). [PYTHON_SIM]"
+      - name: series_type
+        description: "MONTHLY / QUARTERLY / LEAP / WARRANT. Weeklies excluded per operator decision."
+      - name: mid_price
+        description: "(bid + ask) / 2 if both > 0, else last_trade_price."
+
+  - name: gme_dws_strike_gex_1d
+    description: "Net GEX by strike, daily aggregation. Ranked by absolute GEX descending."
+
+  - name: gme_dws_warrant_monitor_1d
+    description: "Daily warrant position monitoring. All position values from dbt vars (not hardcoded)."
+
+  - name: gme_dws_daily_snapshot_1d
+    description: "Daily summary for briefing skill. Combines spot, max pain (per-expiry nearest), GEX, P/C ratio, top OI strikes."
+
+  - name: gme_dws_gex_trend_nd
+    description: "Rolling 5-day GEX trend with regime classification. Adapted from Shopee order_mart _nd pattern."
+
+  - name: gme_dws_gex_flip_alert_1d
+    description: "GEX regime transition alerts. Detects flips (positive/negative), worsening, regime changes."
+
+  - name: gme_dws_warrant_mtm_1d
+    description: "Warrant mark-to-market using matching CBOE $32C call chain. Daily P&L + position Greeks."
+
+  - name: gme_dws_flow_pressure_1d
+    description: "Options flow pressure proxy. UNUSUAL_FLOW / POSITION_BUILD / TRADING_CHURN labels. NOTE: proxy only, no institutional identity data."
