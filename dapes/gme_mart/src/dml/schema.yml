@@ -1,6 +1,19 @@
 version: 2
 
 models:
+  - name: gme_dim_date
+    description: "Trading calendar dimension with holidays + macro events. Role-playing: use as trade_date or expiry_date FK. Generated from date spine + holiday/event seeds."
+    columns:
+      - name: date_key
+        description: "Calendar date (PK). Range: 2025-01-01 to 2027-12-31."
+        tests: [not_null, unique]
+      - name: is_trading_day
+        description: "NYSE open? False on weekends + holidays (except early close days)."
+      - name: has_fomc
+        description: "FOMC decision on this date"
+      - name: has_earnings
+        description: "GME earnings report on this date"
+
   - name: gme_ods_cboe_options_chain
     description: "Raw CBOE delayed options chain ingested via MotherDuck httpfs. Append-only incremental."
     columns:

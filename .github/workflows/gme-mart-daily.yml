@@ -40,3 +40,7 @@ jobs:
       - name: dbt test (DQC checks)
         working-directory: dapes/gme_mart
         run: dbt test --profiles-dir . --target cloud
+
+      - name: dbt docs generate
+        working-directory: dapes/gme_mart
+        run: dbt docs generate --profiles-dir . --target cloud
