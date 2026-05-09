@@ -33,13 +33,8 @@ SELECT
     (ods.expiry - ods.pull_date)                       AS dte,
     ods.underlying_close                               AS spot,
 
-    -- GEX: gamma * OI * 100 * spot^2 * 0.01 * sign
-    COALESCE(ods.gamma, 0)
-        * COALESCE(ods.open_interest, 0)
-        * 100
-        * POWER(ods.underlying_close, 2)
-        * 0.01
-        * CASE WHEN ods.option_type = 'call' THEN 1 ELSE -1 END
+    -- GEX via macro (single source of truth)
+    {{ gex_contribution('ods.gamma', 'ods.open_interest', 'ods.underlying_close', 'ods.option_type') }}
                                                        AS gex_contribution,
 
     CASE

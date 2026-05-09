@@ -4,6 +4,7 @@ config-version: 2
 profile: 'gme_mart'
 
 model-paths: ["src/dml"]
+macro-paths: ["macros"]
 seed-paths: ["seeds"]
 test-paths: ["tests"]
 target-path: "target"
