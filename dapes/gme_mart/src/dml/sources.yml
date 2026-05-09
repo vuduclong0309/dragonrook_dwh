@@ -1,0 +1,33 @@
+version: 2
+
+sources:
+  - name: cboe
+    description: "CBOE delayed options data ingested via MotherDuck httpfs"
+    schema: main
+    tables:
+      - name: gme_ods_cboe_options_chain
+        description: "Raw options chain. Incremental append-only. ~1300 rows/day."
+        loaded_at_field: pull_ts_utc
+        freshness:
+          warn_after:
+            count: 26
+            period: hour
+          error_after:
+            count: 48
+            period: hour
+        columns:
+          - name: pull_date
+            tests:
+              - not_null
+          - name: option_symbol
+            tests:
+              - not_null
+
+  - name: seeds
+    description: "Static calendar data seeded via dbt seed"
+    schema: main
+    tables:
+      - name: holidays_nyse_2025_2027
+        description: "NYSE holidays 2025-2027. 36 rows."
+      - name: macro_events_2025_2027
+        description: "FOMC, NFP, CPI, GME ER dates 2025-2027. 63 rows."
