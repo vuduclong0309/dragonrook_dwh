@@ -58,7 +58,7 @@ models:
         description: "MONTHLY / QUARTERLY / LEAP / WARRANT. Weeklies excluded per operator decision."
         tests:
           - accepted_values:
-              values: ['MONTHLY', 'QUARTERLY', 'LEAP', 'WARRANT']
+              values: ['MONTHLY', 'LEAP', 'WARRANT']
       - name: mid_price
         description: "(bid + ask) / 2 if both > 0, else last_trade_price."
 

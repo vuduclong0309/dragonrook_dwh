@@ -45,9 +45,9 @@ SELECT
     CASE
         WHEN ods.expiry = DATE '{{ var("warrant_expiry") }}' THEN 'WARRANT'
         WHEN (ods.expiry - ods.pull_date) > 365        THEN 'LEAP'
-        WHEN (ods.expiry - ods.pull_date) <= 7         THEN 'WEEKLY'
         ELSE 'MONTHLY'
     END                                                AS series_type,
+    -- Note: WEEKLY case removed — DTE < 7 already filtered in WHERE clause
 
     ods.provider,
     ods.pull_ts_utc,
@@ -58,4 +58,4 @@ WHERE ods.expiry IS NOT NULL          -- filter out unparseable OCC symbols
   AND ods.open_interest > 0
   AND ods.strike IS NOT NULL
   AND ods.underlying_close IS NOT NULL  -- Codex fix: prevent NULL GEX propagation
-  AND (ods.expiry - ods.pull_date) >= 7  -- exclude weeklies
+  AND (ods.expiry - ods.pull_date) > 7   -- exclude weeklies (DTE <= 7)
