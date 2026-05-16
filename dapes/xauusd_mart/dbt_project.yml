@@ -1,0 +1,18 @@
+name: 'xauusd_mart'
+version: '1.0.0'
+config-version: 2
+profile: 'xauusd_mart'
+
+model-paths: ["src/dml"]
+macro-paths: ["macros"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  atr_period: 14
+  adx_period: 14
+  adx_trend_threshold: 25
+  atr_percentile_range_low: 25
+  atr_percentile_range_high: 75

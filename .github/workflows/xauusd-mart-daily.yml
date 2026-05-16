@@ -1,0 +1,53 @@
+name: XAUUSD Mart Daily Pipeline
+
+on:
+  schedule:
+    # 19:00 UTC (15:00 ET) — after COMEX gold close (13:30 ET) with buffer
+    # Separate from gme-mart-daily (20:45 UTC) to avoid resource contention
+    - cron: '0 19 * * 1-5'
+  workflow_dispatch: {}
+
+jobs:
+  xauusd-mart:
+    runs-on: ubuntu-latest
+    env:
+      MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install dbt-core dbt-duckdb yfinance pandas
+
+      - name: Run DDL (create/verify schemas)
+        working-directory: dapes/xauusd_mart
+        run: python src/resource/run_ddl.py --target cloud
+
+      - name: Ingest XAUUSD daily bars
+        working-directory: dapes/xauusd_mart
+        run: python src/resource/ingest_xauusd.py --target cloud --days 5
+
+      - name: dbt deps
+        working-directory: dapes/xauusd_mart
+        run: dbt deps --profiles-dir .
+
+      - name: dbt seed (holidays + macro events)
+        working-directory: dapes/xauusd_mart
+        run: dbt seed --profiles-dir . --target cloud
+
+      - name: dbt run (ODS → DWD → DWS pipeline)
+        working-directory: dapes/xauusd_mart
+        run: dbt run --profiles-dir . --target cloud
+
+      - name: dbt test (DQC checks)
+        working-directory: dapes/xauusd_mart
+        run: dbt test --profiles-dir . --target cloud
+
+      - name: dbt source freshness
+        working-directory: dapes/xauusd_mart
+        run: dbt source freshness --profiles-dir . --target cloud || true

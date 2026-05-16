@@ -1,0 +1,132 @@
+{
+  "report": "dragonrook_dwh framework conformance",
+  "framework": "mart-forge v1.0",
+  "framework_repo": "https://github.com/vuduclong0309/mart-forge",
+  "generated_at": "2026-05-16T10:30:00Z",
+  "generated_by": "DROOK-OPUS (agent/90ba71e0)",
+  "marts": [
+    {
+      "name": "gme-mart",
+      "path": "dapes/gme_mart/",
+      "status": "live",
+      "conformance": {
+        "mart_yml_present": true,
+        "mart_yml_valid": true,
+        "dqc_scorecard_present": true,
+        "dqc_all_controls_addressed": true,
+        "naming_conventions": {
+          "compliant": true,
+          "prefix": "gme",
+          "models_checked": [
+            {"name": "gme_ods_cboe_options_chain", "pattern": "{p}_ods_{source}_{entity}", "match": true},
+            {"name": "gme_dim_date", "pattern": "{p}_dim_{entity}", "match": true},
+            {"name": "gme_dwd_option_contract_di", "pattern": "{p}_dwd_{grain}_{entity}_di", "match": true},
+            {"name": "gme_dws_strike_gex_1d", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_dws_daily_snapshot_1d", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_dws_gex_trend_nd", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_dws_gex_flip_alert_1d", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_dws_warrant_monitor_1d", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_dws_warrant_mtm_1d", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_dws_flow_pressure_1d", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_dws_unusual_flow_summary_1d", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_dws_warrant_lifecycle_td", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true},
+            {"name": "gme_ads_warrant_dashboard", "pattern": "{p}_ads_{consumer}_{purpose}", "match": true}
+          ]
+        },
+        "template_lineage": {
+          "dim_date": "mart-forge/templates/models/dim/template.sql (adapted for NYSE + role-playing pattern)",
+          "ods": "mart-forge/templates/models/ods/template.sql (adapted for CBOE httpfs ingestion)",
+          "dwd": "mart-forge/templates/models/dwd/template.sql (adapted for options grain)",
+          "dws": "mart-forge/templates/models/dws/template.sql (multiple aggregations)",
+          "ads": "mart-forge/templates/models/ads/template.sql (OBT pattern)"
+        },
+        "github_actions": {
+          "workflow_file": ".github/workflows/gme-mart-daily.yml",
+          "schedule": "45 20 * * 1-5",
+          "steps": ["seed", "run", "test"],
+          "status": "green"
+        }
+      },
+      "model_count": {
+        "ods": 1,
+        "dim": 1,
+        "dwd": 1,
+        "dws": 10,
+        "ads": 1,
+        "meta": 1,
+        "total": 15
+      },
+      "test_count": {
+        "generic_in_schema": 30,
+        "singular": 5,
+        "total": 35
+      },
+      "gaps": [
+        {
+          "id": "GME-GAP-1",
+          "description": "schema.yml relationships test not explicitly declared for gme_dwd_option_contract_di -> gme_dim_date",
+          "severity": "low",
+          "mitigation": "FK integrity is enforced implicitly via SQL join in DWD model — orphan rows are impossible by construction"
+        }
+      ]
+    },
+    {
+      "name": "xauusd-mart",
+      "path": "dapes/xauusd_mart/",
+      "status": "live",
+      "conformance": {
+        "mart_yml_present": true,
+        "mart_yml_valid": true,
+        "dqc_scorecard_present": true,
+        "dqc_all_controls_addressed": true,
+        "naming_conventions": {
+          "compliant": true,
+          "prefix": "xauusd",
+          "models_checked": [
+            {"name": "xauusd_ods_daily_bar", "pattern": "{p}_ods_{source}_{entity}", "match": true},
+            {"name": "xauusd_dim_date", "pattern": "{p}_dim_{entity}", "match": true},
+            {"name": "xauusd_dwd_bar_di", "pattern": "{p}_dwd_{grain}_{entity}_di", "match": true},
+            {"name": "xauusd_dws_regime_1d", "pattern": "{p}_dws_{dims}_{metric}_{window}", "match": true}
+          ]
+        },
+        "template_lineage": {
+          "dim_date": "mart-forge/templates/models/dim/template.sql (adapted for COMEX via NYSE proxy)",
+          "ods": "mart-forge/templates/models/ods/template.sql (adapted for yfinance OHLCV ingestion)",
+          "dwd": "mart-forge/templates/models/dwd/template.sql (adapted for daily bar grain + ATR calc)",
+          "dws": "mart-forge/templates/models/dws/template.sql (regime classification via ADX+ATR)"
+        },
+        "github_actions": {
+          "workflow_file": ".github/workflows/xauusd-mart-daily.yml",
+          "schedule": "0 19 * * 1-5",
+          "steps": ["seed", "run", "test"],
+          "status": "green"
+        }
+      },
+      "model_count": {
+        "ods": 1,
+        "dim": 1,
+        "dwd": 1,
+        "dws": 1,
+        "ads": 0,
+        "total": 4
+      },
+      "test_count": {
+        "generic_in_schema": 15,
+        "singular": 3,
+        "total": 18
+      },
+      "gaps": []
+    }
+  ],
+  "summary": {
+    "total_marts": 2,
+    "all_mart_yml_present": true,
+    "all_dqc_scorecard_present": true,
+    "all_naming_compliant": true,
+    "all_pipelines_configured": true,
+    "total_models": 19,
+    "total_tests": 53,
+    "open_gaps": 1,
+    "verdict": "CONFORMANT"
+  }
+}

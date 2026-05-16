@@ -1,0 +1,35 @@
+mart:
+  name: xauusd-mart
+  db_name: xauusd_db
+  prefix: xauusd
+  grain: per-bar-per-day
+  version: "1.0"
+
+providers:
+  primary: yfinance
+  fallback: null
+  auth_required: false
+
+schedule:
+  cron: "0 19 * * 1-5"
+  timezone: America/New_York
+  skip_holidays: true
+
+pipeline:
+  steps: [seed, run, test]
+  fail_fast: true
+  timeout_minutes: 10
+
+dqc:
+  control_catalog: required
+  scorecard_artifact: dqc_scorecard.json
+  reconciliation:
+    - metric: daily_close
+      source: yfinance_spot_check
+      tolerance: 0.001
+      severity: warn
+
+dimensions:
+  conformed:
+    - dim_date
+  local: []

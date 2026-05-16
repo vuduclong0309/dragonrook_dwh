@@ -1,0 +1,62 @@
+event_date,event_type,event_name,impact,source
+2025-01-29,FOMC,FOMC Decision Jan,HIGH,fed_calendar
+2025-03-19,FOMC,FOMC Decision Mar,HIGH,fed_calendar
+2025-05-07,FOMC,FOMC Decision May,HIGH,fed_calendar
+2025-06-18,FOMC,FOMC Decision Jun,HIGH,fed_calendar
+2025-07-30,FOMC,FOMC Decision Jul,HIGH,fed_calendar
+2025-09-17,FOMC,FOMC Decision Sep,HIGH,fed_calendar
+2025-10-29,FOMC,FOMC Decision Oct,HIGH,fed_calendar
+2025-12-17,FOMC,FOMC Decision Dec,HIGH,fed_calendar
+2026-01-28,FOMC,FOMC Decision Jan,HIGH,fed_calendar
+2026-03-18,FOMC,FOMC Decision Mar,HIGH,fed_calendar
+2026-04-29,FOMC,FOMC Decision Apr,HIGH,fed_calendar
+2026-06-10,FOMC,FOMC Decision Jun,HIGH,fed_calendar
+2026-07-29,FOMC,FOMC Decision Jul,HIGH,fed_calendar
+2026-09-16,FOMC,FOMC Decision Sep,HIGH,fed_calendar
+2026-10-28,FOMC,FOMC Decision Oct,HIGH,fed_calendar
+2026-12-16,FOMC,FOMC Decision Dec,HIGH,fed_calendar
+2025-01-10,NFP,NFP Jan,HIGH,bls_calendar
+2025-02-07,NFP,NFP Feb,HIGH,bls_calendar
+2025-03-07,NFP,NFP Mar,HIGH,bls_calendar
+2025-04-04,NFP,NFP Apr,HIGH,bls_calendar
+2025-05-02,NFP,NFP May,HIGH,bls_calendar
+2025-06-06,NFP,NFP Jun,HIGH,bls_calendar
+2025-07-03,NFP,NFP Jul,HIGH,bls_calendar
+2025-08-01,NFP,NFP Aug,HIGH,bls_calendar
+2025-09-05,NFP,NFP Sep,HIGH,bls_calendar
+2025-10-03,NFP,NFP Oct,HIGH,bls_calendar
+2025-11-07,NFP,NFP Nov,HIGH,bls_calendar
+2025-12-05,NFP,NFP Dec,HIGH,bls_calendar
+2026-01-09,NFP,NFP Jan,HIGH,bls_calendar
+2026-02-06,NFP,NFP Feb,HIGH,bls_calendar
+2026-03-06,NFP,NFP Mar,HIGH,bls_calendar
+2026-04-03,NFP,NFP Apr,HIGH,bls_calendar
+2026-05-01,NFP,NFP May,HIGH,bls_calendar
+2026-06-05,NFP,NFP Jun,HIGH,bls_calendar
+2026-07-02,NFP,NFP Jul,HIGH,bls_calendar
+2026-08-07,NFP,NFP Aug,HIGH,bls_calendar
+2026-09-04,NFP,NFP Sep,HIGH,bls_calendar
+2026-10-02,NFP,NFP Oct,HIGH,bls_calendar
+2026-11-06,NFP,NFP Nov,HIGH,bls_calendar
+2026-12-04,NFP,NFP Dec,HIGH,bls_calendar
+2025-01-15,CPI,CPI Jan,HIGH,bls_calendar
+2025-02-12,CPI,CPI Feb,HIGH,bls_calendar
+2025-03-12,CPI,CPI Mar,HIGH,bls_calendar
+2025-04-10,CPI,CPI Apr,HIGH,bls_calendar
+2025-05-13,CPI,CPI May,HIGH,bls_calendar
+2025-06-11,CPI,CPI Jun,HIGH,bls_calendar
+2025-07-11,CPI,CPI Jul,HIGH,bls_calendar
+2025-08-12,CPI,CPI Aug,HIGH,bls_calendar
+2025-09-10,CPI,CPI Sep,HIGH,bls_calendar
+2025-10-14,CPI,CPI Oct,HIGH,bls_calendar
+2025-11-12,CPI,CPI Nov,HIGH,bls_calendar
+2025-12-10,CPI,CPI Dec,HIGH,bls_calendar
+2026-01-13,CPI,CPI Jan,HIGH,bls_calendar
+2026-02-11,CPI,CPI Feb,HIGH,bls_calendar
+2026-03-11,CPI,CPI Mar,HIGH,bls_calendar
+2026-04-14,CPI,CPI Apr,HIGH,bls_calendar
+2026-05-12,CPI,CPI May,HIGH,bls_calendar
+2026-06-10,CPI,CPI Jun,HIGH,bls_calendar
+2025-09-09,GME_ER,GME Q2 2025 Earnings,CRITICAL,gamestop_ir
+2025-12-09,GME_ER,GME Q3 2025 Earnings (est),CRITICAL,gamestop_ir
+2026-06-09,GME_ER,GME Q2 2026 Earnings (est),CRITICAL,gamestop_ir
