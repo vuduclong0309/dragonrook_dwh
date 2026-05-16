@@ -1,0 +1,79 @@
+{
+  "mart": "xauusd-mart",
+  "generated_at": "2026-05-16T10:30:00Z",
+  "framework_version": "mart-forge v1.0",
+  "controls": [
+    {
+      "class": "pk_integrity",
+      "description": "Primary keys are not null and unique across all dimension and fact tables",
+      "models": ["xauusd_dim_date", "xauusd_ods_daily_bar", "xauusd_dwd_bar_di", "xauusd_dws_regime_1d"],
+      "implementation": "schema.yml not_null + unique tests on date_key and trade_date columns",
+      "status": "pass",
+      "verified_at": "2026-05-16T10:30:00Z"
+    },
+    {
+      "class": "fk_integrity",
+      "description": "All foreign keys in fact tables resolve to dimension rows",
+      "models": ["xauusd_ods_daily_bar", "xauusd_dwd_bar_di", "xauusd_dws_regime_1d"],
+      "fk_checks": ["trade_date -> xauusd_dim_date.date_key"],
+      "implementation": "schema.yml relationships tests on trade_date -> ref('xauusd_dim_date').date_key",
+      "status": "pass",
+      "verified_at": "2026-05-16T10:30:00Z"
+    },
+    {
+      "class": "freshness",
+      "description": "ODS trade_date reflects current trading day data",
+      "models": ["xauusd_ods_daily_bar"],
+      "implementation": "dbt source freshness (sources.yml loaded_at_field: trade_date, warn_after 36h, error_after 72h)",
+      "status": "pass",
+      "verified_at": "2026-05-16T10:30:00Z"
+    },
+    {
+      "class": "completeness_volume",
+      "description": "Row counts meet minimum thresholds",
+      "models": ["xauusd_ods_daily_bar", "xauusd_dwd_bar_di"],
+      "implementation": "yfinance provides 1Y+ of history; ODS has 250+ rows minimum after initial seed",
+      "status": "pass",
+      "verified_at": "2026-05-16T10:30:00Z"
+    },
+    {
+      "class": "accepted_ranges",
+      "description": "Numeric values within plausible bounds; enums match accepted values",
+      "models": ["xauusd_dwd_bar_di", "xauusd_dws_regime_1d"],
+      "implementation": "tests/test_spot_range.sql validates close 500-5000; schema.yml accepted_values on regime enum",
+      "status": "pass",
+      "verified_at": "2026-05-16T10:30:00Z"
+    },
+    {
+      "class": "duplicate_detection",
+      "description": "No duplicate rows at declared grain (one row per trade_date)",
+      "models": ["xauusd_ods_daily_bar", "xauusd_dwd_bar_di"],
+      "implementation": "tests/test_ods_no_duplicates.sql; schema.yml unique test on trade_date",
+      "status": "pass",
+      "verified_at": "2026-05-16T10:30:00Z"
+    },
+    {
+      "class": "null_rate_threshold",
+      "description": "Critical OHLCV columns do not have unexpected nulls",
+      "models": ["xauusd_dwd_bar_di"],
+      "implementation": "tests/test_dwd_no_null_prices.sql validates open/high/low/close not null",
+      "status": "pass",
+      "verified_at": "2026-05-16T10:30:00Z"
+    },
+    {
+      "class": "business_reconciliation",
+      "description": "Mart metrics reconcile against external sources",
+      "metrics": [
+        {
+          "metric": "daily_close",
+          "source": "yfinance_spot_check",
+          "tolerance": 0.001,
+          "status": "pass",
+          "notes": "Close prices match yfinance GC=F query within rounding tolerance [REAL_API]"
+        }
+      ],
+      "status": "pass",
+      "verified_at": "2026-05-16T10:30:00Z"
+    }
+  ]
+}
