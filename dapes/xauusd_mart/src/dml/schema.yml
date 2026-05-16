@@ -1,0 +1,64 @@
+version: 2
+
+models:
+  - name: xauusd_dim_date
+    description: "Trading calendar dimension. NYSE as COMEX proxy (v1). Role-playing: join on trade_date."
+    columns:
+      - name: date_key
+        description: "Calendar date (PK). Range: 2025-01-01 to 2027-12-31."
+        tests: [not_null, unique]
+      - name: is_trading_day
+        description: "Market open? False on weekends + holidays."
+
+  - name: xauusd_ods_daily_bar
+    description: "Raw daily OHLCV from yfinance GC=F. Incremental by trade_date. [REAL_API]"
+    columns:
+      - name: trade_date
+        description: "Trading day (PK)"
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('xauusd_dim_date')
+              field: date_key
+      - name: close
+        tests: [not_null]
+
+  - name: xauusd_dwd_bar_di
+    description: "Cleaned daily bar with True Range and ATR(14). [REAL_API] OHLCV, [THEORETICAL] ATR calc."
+    columns:
+      - name: trade_date
+        description: "Trading day (PK)"
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('xauusd_dim_date')
+              field: date_key
+      - name: open
+        tests: [not_null]
+      - name: high
+        tests: [not_null]
+      - name: low
+        tests: [not_null]
+      - name: close
+        tests: [not_null]
+
+  - name: xauusd_dws_regime_1d
+    description: "Daily regime classification via ADX(14) + ATR percentile. [THEORETICAL] threshold defaults."
+    columns:
+      - name: trade_date
+        description: "Trading day (PK)"
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('xauusd_dim_date')
+              field: date_key
+      - name: close
+        tests: [not_null]
+      - name: regime
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['STRONG_TREND', 'TRENDING', 'RANGING', 'LOW_VOL_RANGE']

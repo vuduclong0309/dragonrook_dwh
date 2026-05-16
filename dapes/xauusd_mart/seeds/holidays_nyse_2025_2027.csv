@@ -1,0 +1,37 @@
+holiday_date,exchange,holiday_name,early_close
+2025-01-01,NYSE,New Year's Day,false
+2025-01-20,NYSE,MLK Jr. Day,false
+2025-02-17,NYSE,Presidents' Day,false
+2025-04-18,NYSE,Good Friday,false
+2025-05-26,NYSE,Memorial Day,false
+2025-06-19,NYSE,Juneteenth,false
+2025-07-03,NYSE,Independence Day (observed),true
+2025-07-04,NYSE,Independence Day,false
+2025-09-01,NYSE,Labor Day,false
+2025-11-27,NYSE,Thanksgiving,false
+2025-11-28,NYSE,Day After Thanksgiving,true
+2025-12-25,NYSE,Christmas Day,false
+2025-12-24,NYSE,Christmas Eve,true
+2026-01-01,NYSE,New Year's Day,false
+2026-01-19,NYSE,MLK Jr. Day,false
+2026-02-16,NYSE,Presidents' Day,false
+2026-04-03,NYSE,Good Friday,false
+2026-05-25,NYSE,Memorial Day,false
+2026-06-19,NYSE,Juneteenth,false
+2026-07-03,NYSE,Independence Day (observed),false
+2026-09-07,NYSE,Labor Day,false
+2026-11-26,NYSE,Thanksgiving,false
+2026-11-27,NYSE,Day After Thanksgiving,true
+2026-12-25,NYSE,Christmas Day,false
+2026-12-24,NYSE,Christmas Eve,true
+2027-01-01,NYSE,New Year's Day,false
+2027-01-18,NYSE,MLK Jr. Day,false
+2027-02-15,NYSE,Presidents' Day,false
+2027-03-26,NYSE,Good Friday,false
+2027-05-31,NYSE,Memorial Day,false
+2027-06-18,NYSE,Juneteenth (observed),false
+2027-07-05,NYSE,Independence Day (observed),false
+2027-09-06,NYSE,Labor Day,false
+2027-11-25,NYSE,Thanksgiving,false
+2027-11-26,NYSE,Day After Thanksgiving,true
+2027-12-24,NYSE,Christmas Eve (observed),false

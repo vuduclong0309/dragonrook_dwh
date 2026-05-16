@@ -38,6 +38,32 @@ Real-time GME options analytics: GEX (Gamma Exposure), max pain, warrant monitor
 - P/C ratio: 0.33 = Barchart
 - Top OI strikes: $30/$25/$50 = consistent
 
+## XAUUSD Mart — Second Mart
+
+Daily gold/XAUUSD analytics for FHAegis (FHAG) pillar. Regime classification (trending vs ranging) via ADX + ATR percentile.
+
+**Data source:** Yahoo Finance (`GC=F` COMEX gold futures) via Python `yfinance` ingestion → MotherDuck. Daily bars only (v1).
+
+### Model Inventory (4 models)
+
+| Layer | Model | Purpose |
+|---|---|---|
+| **DIM** | `xauusd_dim_date` | Trading calendar (NYSE as COMEX proxy) |
+| **ODS** | `xauusd_ods_daily_bar` | Raw daily OHLCV from yfinance. Incremental |
+| **DWD** | `xauusd_dwd_bar_di` | Cleaned bar + True Range + ATR(14) |
+| **DWS** | `xauusd_dws_regime_1d` | ADX(14) + ATR percentile → regime label |
+
+### Regime Labels [THEORETICAL]
+
+| Regime | Condition |
+|---|---|
+| `STRONG_TREND` | ADX >= 25 AND ATR percentile > 75th |
+| `TRENDING` | ADX >= 25 |
+| `LOW_VOL_RANGE` | ADX < 25 AND ATR percentile < 25th |
+| `RANGING` | ADX < 25 |
+
+**Schedule:** GitHub Actions cron `0 19 * * 1-5` (15:00 ET, after COMEX close)
+
 ## Architecture
 
 ```
@@ -74,7 +100,7 @@ MCP Skill (dapes-briefing)
 ```
 dragonrook_dwh/
 ├── dapes/                          # Project scope
-│   └── gme_mart/                   # First mart
+│   ├── gme_mart/                   # First mart (GME options)
 │       ├── src/
 │       │   ├── ddl/                # CREATE TABLE (explicit schemas)
 │       │   │   ├── ods/
@@ -93,9 +119,19 @@ dragonrook_dwh/
 │       ├── docs/                   # Shopee DE patterns (~2600 lines)
 │       ├── dbt_project.yml
 │       └── profiles.yml
+│   └── xauusd_mart/                # Second mart (XAUUSD regime)
+│       ├── src/
+│       │   ├── ddl/                # CREATE TABLE schemas
+│       │   ├── dml/                # dbt models (ods/dim/dwd/dws)
+│       │   └── resource/           # Ingestion + DDL runner
+│       ├── seeds/                  # Shared holiday/event CSVs
+│       ├── tests/                  # DQC tests
+│       ├── dbt_project.yml
+│       ���── profiles.yml
 ├── shared/                         # Conformed dimensions (future)
 ├── .github/workflows/
-│   └── gme-mart-daily.yml
+│   ├── gme-mart-daily.yml
+│   └── xauusd-mart-daily.yml
 └── README.md
 ```
 

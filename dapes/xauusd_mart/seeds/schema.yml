@@ -1,0 +1,15 @@
+version: 2
+
+seeds:
+  - name: holidays_nyse_2025_2027
+    description: "NYSE holidays 2025-2027. Used as proxy for COMEX calendar."
+    config:
+      column_types:
+        holiday_date: date
+        early_close: boolean
+
+  - name: macro_events_2025_2027
+    description: "FOMC, NFP, CPI macro event dates 2025-2027."
+    config:
+      column_types:
+        event_date: date

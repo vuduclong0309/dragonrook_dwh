@@ -1,0 +1,31 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw XAUUSD data ingested by Python ingest script before dbt run"
+    schema: main
+    tables:
+      - name: xauusd_ods_daily_bar
+        description: "Daily OHLCV bars from yfinance GC=F. Ingested by ingest_xauusd.py."
+        loaded_at_field: pull_ts_utc
+        freshness:
+          warn_after:
+            count: 26
+            period: hour
+          error_after:
+            count: 48
+            period: hour
+        columns:
+          - name: trade_date
+            tests:
+              - not_null
+              - unique
+
+  - name: seeds
+    description: "Static calendar data seeded via dbt seed"
+    schema: main
+    tables:
+      - name: holidays_nyse_2025_2027
+        description: "NYSE holidays 2025-2027 (proxy for COMEX). 36 rows."
+      - name: macro_events_2025_2027
+        description: "FOMC, NFP, CPI dates 2025-2027. 63 rows."
