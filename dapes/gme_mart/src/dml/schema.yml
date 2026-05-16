@@ -129,8 +129,24 @@ models:
               values: ['UNUSUAL_FLOW', 'POSITION_BUILD', 'TRADING_CHURN', 'NORMAL']
 
   - name: gme_dws_iv_percentile_1d
-    description: "IV percentile rank vs trailing 252-day history. Phase 1.5 enhancement."
+    description: "IV percentile rank vs rolling 252-trading-day history. Grain: (pull_date, ticker, expiry_bucket). Phase 1.5 enhancement."
     columns:
+      - name: pull_date
+        tests:
+          - not_null
+          - relationships:
+              to: ref('gme_dim_date')
+              field: date_key
+      - name: ticker
+        tests: [not_null]
+      - name: expiry_bucket
+        description: "DTE tenor bucket: NEAR (7-45), MID (46-90), FAR (91+)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['NEAR', 'MID', 'FAR']
+      - name: iv_percentile_252d
+        description: "PERCENT_RANK over trailing 252 trading days. NULL when history < 252 days. [THEORETICAL] 252-day window."
       - name: iv_regime
         tests:
           - accepted_values:

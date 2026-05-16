@@ -52,7 +52,7 @@ SELECT
 
     -- IV Regime (Phase 1.5)
     iv.iv_atm,
-    iv.iv_percentile_all,
+    iv.iv_percentile_252d,
     iv.iv_regime,
     iv.history_days                                          AS iv_history_days,
 
@@ -82,6 +82,7 @@ LEFT JOIN {{ ref('gme_dws_warrant_mtm_1d') }} mtm
     ON snap.pull_date = mtm.pull_date AND snap.ticker = mtm.ticker
 LEFT JOIN {{ ref('gme_dws_iv_percentile_1d') }} iv
     ON snap.pull_date = iv.pull_date AND snap.ticker = iv.ticker
+    AND iv.expiry_bucket = 'NEAR'
 LEFT JOIN {{ ref('gme_dws_unusual_flow_summary_1d') }} flow
     ON snap.pull_date = flow.pull_date AND snap.ticker = flow.ticker
 LEFT JOIN {{ ref('gme_dws_warrant_lifecycle_td') }} lc

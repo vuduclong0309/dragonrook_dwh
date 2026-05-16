@@ -37,6 +37,16 @@ SELECT
     s.spot * {{ var('share_quantity') }}                                    AS share_position_value,
     GREATEST(0, s.spot - {{ var('warrant_strike') }})
         * {{ var('warrant_quantity') }}
-        + s.spot * {{ var('share_quantity') }}                              AS total_position_value
+        + s.spot * {{ var('share_quantity') }}                              AS total_position_value,
+
+    -- IV context from Phase 1.5 (NEAR bucket = front-month benchmark)
+    iv.iv_atm,
+    iv.iv_percentile_252d,
+    iv.iv_regime,
+    iv.history_days                                                        AS iv_history_days
 
 FROM latest_spot s
+LEFT JOIN {{ ref('gme_dws_iv_percentile_1d') }} iv
+    ON  s.pull_date = iv.pull_date
+    AND s.ticker    = iv.ticker
+    AND iv.expiry_bucket = 'NEAR'
