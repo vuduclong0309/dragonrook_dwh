@@ -4,6 +4,12 @@ Kimball-style data warehouse on [MotherDuck](https://motherduck.com/) (cloud Duc
 
 **Architecture:** Adapted from Shopee's production data marts (DE101 Kimball methodology). DDL/DML separation, multi-tier DQC, Kimball bus matrix.
 
+## How to Read This Project
+
+1. **Start with [`bi_req/`](bi_req/)** for the business problem — why monitor GME options via a DWH, and what decisions the data informs
+2. **Read [`dapes/gme_mart/docs/`](dapes/gme_mart/docs/)** for methodology — Kimball patterns, bus matrix, DQC framework
+3. **Explore [`dapes/`](dapes/)** for implementation — GME mart (options analytics) and XAUUSD mart (regime classification)
+
 ## GME Mart — First Mart
 
 Real-time GME options analytics: GEX (Gamma Exposure), max pain, warrant monitoring, flow pressure detection.
