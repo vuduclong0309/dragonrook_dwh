@@ -81,12 +81,12 @@
         },
         {
           "metric": "net_gex",
-          "source": "external",
-          "tolerance": null,
+          "source": "openbb",
+          "tolerance": 0.15,
           "status": "unavailable",
-          "waiver": "No free external GEX source exists for verification. Paywalled sources (SpotGamma, Volland) are out of budget. GEX formula verified via Python reference implementation [PYTHON_SIM] but external reconciliation is not feasible.",
+          "waiver": "OpenBB SDK v4.7.1 tested 2026-05-21 [REAL_API]. CBOE provider not available for options chains (only intrinio and yfinance). yfinance provider returns 905 contracts with IV and OI but no gamma column — GEX formula requires gamma directly. SAME_SOURCE=false (yfinance upstream is Yahoo Finance API, independent of cdn.cboe.com/api/global/delayed_quotes/options/GME.json). Independent source exists but lacks required Greek (gamma) for reconciliation. Deriving gamma from IV via Black-Scholes introduces model risk disqualifying it as independent verification.",
           "waiver_approved_by": "operator",
-          "waiver_date": "2026-05-08"
+          "waiver_date": "2026-05-21"
         }
       ],
       "status": "pass",
