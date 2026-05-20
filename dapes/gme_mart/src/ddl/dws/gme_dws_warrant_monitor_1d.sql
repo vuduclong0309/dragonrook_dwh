@@ -16,5 +16,11 @@ CREATE TABLE IF NOT EXISTS gme_dws_warrant_monitor_1d (
     moneyness               VARCHAR,      -- ITM / NEAR_MONEY / OTM
     theta_regime            VARCHAR,      -- LOW / MEDIUM / HIGH
     share_position_value    DOUBLE,
-    total_position_value    DOUBLE
+    total_position_value    DOUBLE,
+
+    -- IV context (Phase 1.5, from NEAR bucket)
+    iv_atm                  DOUBLE,
+    iv_percentile_252d      DOUBLE,
+    iv_regime               VARCHAR,
+    iv_history_days         INTEGER
 );

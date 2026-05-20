@@ -93,7 +93,7 @@ if warrant_mark and warrant_mark > 0:
 iv_regime = r.get('iv_regime', 'N/A')
 print(f"### IV Regime [REAL_API]")
 print(f"- ATM IV: {r.get('iv_atm', 0):.1%}")
-print(f"- Percentile: {r.get('iv_percentile_all', 0):.0f}%")
+print(f"- Percentile: {r.get('iv_percentile_252d', 0):.0f}%")
 print(f"- Regime: {iv_regime} ({r.get('iv_history_days', 0):.0f} days history)")
 print()
 print(f"### Top GEX Strikes [REAL_API + PYTHON_SIM]")
