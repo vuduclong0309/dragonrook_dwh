@@ -7,6 +7,7 @@ mart:
 
 providers:
   primary: cboe
+  reconciliation: openbb
   fallback: yfinance
   auth_required: false
 
@@ -31,6 +32,10 @@ dqc:
     - metric: pc_ratio
       source: barchart
       tolerance: 0.02
+      severity: warn
+    - metric: net_gex
+      source: openbb
+      tolerance: 0.15
       severity: warn
 
 dimensions:
